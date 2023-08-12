@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+    <title>Validate me</title>
+    <style>
+      .highlight {
+        border: 2px solid red;
+        background-color: #ffcccc;
+      }
+      .highlight-radio-checkbox {
+        outline: 2px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    At least one piece of data has to come in from every input type.
+    <form action="" method="get" onsubmit="return validateMe();">
+      <br />
+      Name:<input
+        type="text"
+        id="test"
+        name="fullname"
+        placeholder="Enter Full Name"
+      /><br />
+      Year in School:<br />
+      First<input type="radio" name="gender" value="male" />Second<input
+        type="radio"
+        name="gender"
+        value="female"
+      />
+      >Third<input type="radio" name="gender" value="female" /><br />
+      Hobbies<br />
+      Baseball
+      <input type="checkbox" name="hobbies[]" value="baseball" /> Football
+      <input type="checkbox" name="hobbies[]" value="football" /> Hockey
+      <input type="checkbox" name="hobbies[]" value="hockey" /><br />
+      Favorite Show
+      <select name="show">
+        <option value="">Choose Below</option>
+        <option value="ATHF">Aqua Teen Hunger Force</option>
+        <option value="Family Guy">Family Guy</option>
+        <option value="Simpsons">Simpsons</option>
+      </select><br />
+      Comments<br />
+      <textarea cols="50" rows="6" name="comments">Enter Comments</textarea
+      ><br />
+      <input type="submit" name="submit" value="enter me" />
+    </form>
+    <script>
+      function validateMe() {
+        var form = document.forms[0];
+        var elements = form.elements;
+        var isValid = true;
+
+        for (var i = 0; i < elements.length; i++) {
+          var element = elements[i];
+
+          if (element.nodeName === "INPUT") {
+            if (element.type === "text") {
+              if (!element.value) {
+                isValid = false;
+                element.classList.add("highlight");
+              } else {
+                element.classList.remove("highlight");
+              }
+            } else if (
+              element.type === "radio" ||
+              element.type === "checkbox"
+            ) {
+              var name = element.name;
+              var group = document.getElementsByName(name);
+
+              var isChecked = Array.from(group).some(function (item) {
+                return item.checked;
+              });
+
+              if (!isChecked) {
+                isValid = false;
+                for (var j = 0; j < group.length; j++) {
+                  group[j].classList.add("highlight-radio-checkbox");
+                }
+              } else {
+                for (var j = 0; j < group.length; j++) {
+                  group[j].classList.remove("highlight-radio-checkbox");
+                }
+              }
+            }
+          } else if (element.nodeName === "SELECT") {
+            if (!element.value) {
+              isValid = false;
+              element.classList.add("highlight");
+            } else {
+              element.classList.remove("highlight");
+            }
+          } else if (element.nodeName === "TEXTAREA") {
+            if (!element.value) {
+              isValid = false;
+              element.classList.add("highlight");
+            } else {
+              element.classList.remove("highlight");
+            }
+          }
+        }
+
+        if (!isValid) {
+          alert("Please fill out all required fields.");
+          return false;
+        }
+      }
+    </script>
+  </body>
+</html>
